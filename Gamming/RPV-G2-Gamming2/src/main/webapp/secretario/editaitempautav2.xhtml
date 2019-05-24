@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Pautas</title> 
+        <link rel="shortcut icon" href="../img/favicon.png" type="image/x-png"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel="stylesheet" href="../css/estilo_moderador.css" />
+    </h:head>
+    <h:body>
+        <p:panel>
+            <h:form>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+                <p:menubar style="float:right">
+                    <p:menuitem value="User" icon="fa fa-user" url="#"/>
+                    <p:menuitem value="Sair" icon="fa fa-sign-out" url="../"/>
+                </p:menubar>
+            </h:form>
+            <div id="header">
+                <div><img src="../img/unipampa.png" id="logo"/></div>
+                <div id="logo_texto">Sistema de Votação Online</div>
+            </div>
+            <div class="breadCrumb">
+                <ul>
+                    <li><a href="../home.xhtml">Home</a></li>
+                    <li><a href="selecaoreuniaosec.xhtml">Reuniões</a></li>
+                    <li><a href="edicaoitensreuniao.xhtml">Gerenciamento de Pautas</a></li>
+                    <li><a href="#">Editanto Pauta</a></li>
+                </ul>
+            </div>
+            <p:separator/>
+            <p:panel>
+                <h:form>
+                    <p:growl id="msg" showDetail="true" sticky="true" />
+                    <p:outputPanel><strong>Editar o Item de Pauta</strong></p:outputPanel>
+                    <p:separator/>
+                    <h:panelGrid columns="4" cellpadding="5" >
+                        <p:outputLabel for="desc">Descrição: </p:outputLabel>
+                        <p:inputTextarea id="desc" rows="1" cols="45" style="margin-right: 10px" value="#{itemPautaController.descItemPauta}">       
+                            <p:ajax event="change" update="confirmdialog" />
+                        </p:inputTextarea>
+                        <p:outputLabel for="relator" >Relator: </p:outputLabel>  
+                        <p:autoComplete  value="#{itemPautaController.relator}" id="relator" var ="nome" itemLabel="#{nome}" itemValue="#{nome}" completeMethod="#{itemPautaController.completeText}" required="true" forceSelection="true">
+                            <p:ajax event="change" update="confirmdialog" />
+                            <p:ajax event="blur" update="confirmdialog" />
+                        </p:autoComplete>
+
+                    </h:panelGrid>
+                    <p:commandButton id="confirmdialog" value="Salvar" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" actionListener="#{itemPautaController.atualizarItemPauta()}">
+                        <p:confirm  header="Confirmar Edição" message="#{itemPautaController.mensagemEdicaoPersonalizada}" escape="false" />
+                    </p:commandButton>
+
+                    <p:commandButton value="Cancelar" styleClass="ui-confirmdialog-no" icon="ui-icon-close" action="edicaoitensreuniao">
+                        <p:confirm header="Cancelar" message="Cancelar edição do Item de Pauta?" escape="false" />
+                    </p:commandButton>
+                </h:form>
+            </p:panel>
+            <p:separator/>
+        </p:panel>
+    </h:body>
+</html>
+

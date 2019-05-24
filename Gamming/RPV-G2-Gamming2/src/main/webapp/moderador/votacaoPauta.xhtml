@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:o="http://omnifaces.org/ui">
+
+    <h:head>
+        <title>Votação</title>
+        <link rel="shortcut icon" href="../img/favicon.png" type="image/x-png"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel="stylesheet" href="../css/estilo_moderador.css" />
+        <f:metadata>
+            <f:viewParam name="itemPautaId" value="#{encaminhamentosController.idPauta}" />
+        </f:metadata>
+    </h:head>   
+    <body>
+        <p:panel>
+            <h:form>
+                <p:menubar style="float:right">
+                    <p:menuitem value="User" icon="fa fa-user" url="#"/>
+                    <p:menuitem value="Sair" icon="fa fa-sign-out" url="../../RPV-G2-Gamming2/"/>
+                </p:menubar>
+            </h:form>
+            <div id="header">
+                <div><img src="../img/unipampa.png" id="logo" alt="Logo da Unipampa" /></div>
+                <div id="logo_texto">Sistema de Votação Online</div>
+            </div>
+            <div class="breadCrumb">
+                <ul>
+                    <li><a href="../home.xhtml">Home</a></li>
+                    <li><a href="selecaoreuniaomod">Reuniões</a></li>
+                    <li><a href="itenspauta.xhtml">Pautas</a></li>
+                    <li><a href="#">Pauta</a></li>
+                </ul>
+            </div>
+            #{encaminhamentosController.selecionaPautaDaListaPorId()}
+            #{encaminhamentosController.criarEncaminhamnetos()}
+            <p:growl id="msg" showDetail="true" sticky="true" /> 
+            <p:separator />
+            <p:panel header="#{encaminhamentosController.itemPauta.descricao} - #{encaminhamentosController.itemPauta.relator.nome}">
+                <h:form>
+                    <o:socket channel="acompanhamentoVotacao" onmessage="function(message){ atualizarListaVotos(); console.log(2);}"/>
+                    <p:remoteCommand name="atualizarListaVotos" update="dashboard,msg"/> 
+                    <o:socket channel="resultadoVotacao" onmessage="function(message){ exibirResultados(); console.log(3);}" />
+                    <p:remoteCommand name="exibirResultados" actionListener="#{encaminhamentosController.verificarAlteracaoEstadoVotacao()}" update="dashboard,msg" />
+                </h:form>
+                <p:accordionPanel id="dashboard" dynamic="true" activeIndex="#{encaminhamentosController.activeIndex}">
+                    <p:tab title="Encaminhamento" disabled="#{encaminhamentosController.encRenderizado}">
+                        <h:form id="form">
+                            <p:tabView dynamic="true">
+                                <p:ajax event="tabChange" listener="#{encaminhamentosController.mudarTipoDeEncaminhamento}"/>
+
+                                <p:tab title="Simples" id="simples">
+
+                                    <h:panelGrid columns="2" cellpadding="10"  >
+                                        <p:dataList value="#{encaminhamentosController.encaminhamentoSimples.opcoesVoto}" var="opcao" type="ordered" styleClass="ui-widget-header">
+                                            <f:facet name="header">
+                                                Opções de voto
+                                            </f:facet>
+                                            #{opcao.descricao}
+                                        </p:dataList>
+                                    </h:panelGrid>
+                                </p:tab>
+                                <p:tab title="Customizada" id="custom" >
+
+                                    <h:panelGrid columns="2" cellpadding="10">
+                                        <p:inputText id="opcaoVoto" value="#{encaminhamentosController.opcaoVotoString}"/>
+
+                                        <p:commandButton value="Adicionar"  icon="fa fa-plus" actionListener="#{encaminhamentosController.adicionarOpcaoDeVotoEncaminhamnetoCustomizado()}"
+                                                         update="datalistEC,msg,opcaoVoto">
+                                        </p:commandButton>
+                                        <p:dataList value="#{encaminhamentosController.encaminhamentoCustomziado.opcoesVoto}" var="opcao" type="ordered"
+                                                    id="datalistEC">
+                                            <f:facet name="header">
+                                                Opções de voto  
+                                            </f:facet>
+                                            <p:column>
+                                                #{opcao.descricao} 
+                                            </p:column>
+                                            <p:column>
+                                                <p:commandLink actionListener="#{encaminhamentosController.excluirOpcaoDeVotoEncaminhamentoCustomizado(opcao)}" update="datalistEC,msg">
+                                                    <h:outputText value="X" />
+                                                </p:commandLink>
+                                            </p:column>
+                                        </p:dataList>
+                                        <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                                            <h:outputText value="Segundo Turno: " />
+                                            <p:inputSwitch value="#{encaminhamentosController.encaminhamentoCustomziado.segundoturno}"> 
+                                            </p:inputSwitch>
+
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                </p:tab>
+                            </p:tabView>
+                            <p:commandButton value="Encaminhar"  icon="fa fa-share-square" actionListener="#{encaminhamentosController.salvarEncaminhamentoNoBancoDeDados()}" update="msg,dashboard">
+                                <p:confirm header="Confirmação" message="Encaminhar para votação?" icon="ui-icon-alert" />
+                            </p:commandButton >
+                            <p:commandButton value="Cancelar" icon="fa fa-ban" onclick="window.history.back();">
+                                <p:confirm header="Confirmação" message="Cancelar Encaminhamento?" icon="ui-icon-alert" />
+                            </p:commandButton >
+
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:confirmDialog>
+                        </h:form>
+                    </p:tab >
+                    <p:tab title="Votação" disabled="#{encaminhamentosController.votacaoRenderizado}">
+                        <h:form>
+                            <p:tabView>
+                                <p:tab title="Primeiro Turno">
+                                    <h:panelGrid columns="1" cellpadding="10">
+                                        <p:dataTable id="listaVotosPrimeiroTurno" value="#{votacaoController.votosPrimeiroTurno}" var="myEntry" emptyMessage="Nenhum membro votou">
+                                            <f:facet name="header">
+                                                Membros que Votaram no Primeiro Turno
+                                            </f:facet>
+                                            <p:column>
+                                                #{myEntry.key.getNome()}
+                                            </p:column>
+                                        </p:dataTable>
+                                    </h:panelGrid>
+                                </p:tab>
+
+                                <p:tab title="Segundo Turno" disabled="#{!votacaoController.possuiSegundoTurno}">
+                                    <h:panelGrid columns="1" cellpadding="10">
+                                        <p:dataTable id="listaVotosSegundoTurno" value="#{votacaoController.votosSegundoTurno}" var="myEntry" emptyMessage="Nenhum membro votou">
+                                            <f:facet name="header">
+                                                Membros que Votaram no Segundo Turno
+                                            </f:facet>
+                                            <p:column>
+                                                #{myEntry.key.getNome()}
+                                            </p:column>
+                                        </p:dataTable>
+                                    </h:panelGrid>
+                                </p:tab>
+                            </p:tabView>
+
+                            <p:separator/>
+                            <p:commandButton value="Terminar" actionListener="#{votacaoController.encerrarVotacaoItemPauta()}" update="msg,dashboard">
+                                <p:confirm header="Confirmação" message="Terminar Votação?" icon="ui-icon-alert" />
+                            </p:commandButton >
+                            <p:commandButton value="Cancelar" actionListener="#{votacaoController.cancelarVotacao()}" update="dashboard,msg">
+                                <p:confirm header="Confirmação" message="Cancelar Votação?" icon="ui-icon-alert" />
+                            </p:commandButton >
+                        </h:form>
+                    </p:tab>
+                    <p:tab title="Resultados" disabled="#{encaminhamentosController.resultadoRenderizado}">
+                        <h:form>
+
+                            <div>
+                                <p:separator/>
+                                <p:outputLabel id="opcaoVencedora" value="Opção Vencedora: #{votacaoController.opcaoVencedora.descricao}"/>
+                                <p:separator/>
+                            </div>
+
+                            <p:tabView>
+                                <p:tab title="Primeiro Turno" >
+                                    <h:panelGrid columns="1" cellpadding="10">
+                                        <p:dataTable value="#{votacaoController.numeroVotosPorOpcaoPrimeiroTurno}" var="myEntry" emptyMessage="Nenhum membro votou">
+                                            <f:facet name="header">
+                                                Votos Por Opção
+                                            </f:facet>
+                                            <p:column>
+                                                #{myEntry.key.getDescricao()}
+                                            </p:column>
+                                            <p:column>
+                                                #{myEntry.value}
+                                            </p:column>
+                                        </p:dataTable>
+                                    </h:panelGrid>
+
+                                    <h:panelGrid columns="1" cellpadding="10">
+                                        <p:dataTable value="#{votacaoController.votosPrimeiroTurno}" var="myEntry" emptyMessage="Nenhum membro votou">
+                                            <f:facet name="header">
+                                                Voto Por Membro
+                                            </f:facet>
+                                            <p:column>
+                                                #{myEntry.key.getNome()}
+                                            </p:column>
+                                            <p:column>
+                                                #{myEntry.value.getDescricao()}
+                                            </p:column>
+                                        </p:dataTable>
+                                    </h:panelGrid>
+                                </p:tab>
+
+                                <p:tab title="Segundo Turno" disabled="#{!votacaoController.possuiSegundoTurno}">
+
+                                    <h:panelGrid columns="1" cellpadding="10">
+                                        <p:dataTable  value="#{votacaoController.numeroVotosPorOpcaoSegundoTurno}" var="myEntry" emptyMessage="Nenhum membro votou">
+                                            <f:facet name="header">
+                                                Votos Por Opção
+                                            </f:facet>
+                                            <p:column>
+                                                #{myEntry.key.getDescricao()}
+                                            </p:column>
+                                            <p:column>
+                                                #{myEntry.value}
+                                            </p:column>
+                                        </p:dataTable>
+                                    </h:panelGrid>
+
+                                    <h:panelGrid columns="1" cellpadding="10">
+                                        <p:dataTable value="#{votacaoController.votosSegundoTurno}" var="myEntry" emptyMessage="Nenhum membro votou">
+                                            <f:facet name="header">
+                                                Votos Primeiro Turno
+                                            </f:facet>
+                                            <p:column>
+                                                #{myEntry.key.getNome()}
+                                            </p:column>
+                                            <p:column>
+                                                #{myEntry.value.getDescricao()}
+                                            </p:column>
+                                        </p:dataTable>
+                                    </h:panelGrid>
+                                </p:tab>
+                            </p:tabView>
+                            <p:separator/>
+                            <p:commandButton value="Voltar para itens de pauta" action="itenspauta" class="redbutton" />
+                        </h:form>
+                    </p:tab>
+                </p:accordionPanel>
+            </p:panel>
+            <p:separator/>
+        </p:panel>
+    </body>
+</html>

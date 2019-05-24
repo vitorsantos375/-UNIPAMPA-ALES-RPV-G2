@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Home</title> 
+        <link rel="shortcut icon" href="img/favicon.png" type="image/x-png"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel="stylesheet" href="css/estilo_moderador.css" />
+    </h:head> 
+    <h:body>
+        <p:panel>
+            <h:form>
+                <p:menubar style="float:right">
+                    <p:menuitem value="User" icon="fa fa-user" url="#"/>
+                    <p:menuitem value="Sair" icon="fa fa-sign-out" url="../../RPV-G2-Gamming2/"/>
+                </p:menubar>
+            </h:form>
+            <div id="header">
+                <div><img src="img/unipampa.png" id="logo"/></div>
+                <div id="logo_texto">Sistema de Votação Online</div>
+            </div>
+            <div class="breadCrumb">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                </ul>
+            </div>
+            <p:growl id="msg" showDetail="true" sticky="true" /> 
+            <p:separator/>
+            <p:panel>
+                <h:form>
+                    <p:menu>
+                        <p:submenu label="Administrador" rendered="false">
+                            <p:menuitem value="Administrar"  icon="fa fa-wrench"/>
+                        </p:submenu>
+                        <p:submenu label="Moderador" rendered="#{autenticacaoController.usuario.moderador}">
+                            <p:menuitem value="Abrir Reunião" icon="fa fa-unlock" outcome="moderador/selecaoreuniaomod" />
+                        </p:submenu>
+                        <p:submenu label="Secretario" rendered="#{autenticacaoController.usuario.secretario}">
+                            <p:menuitem value="Gerenciar Itens Pauta" icon="fa fa-pencil" outcome="secretario/selecaoreuniaosec"/>
+                            <p:menuitem value="Gerenciar Reuniões" icon="fa fa-pencil"/>
+                        </p:submenu>     
+                        <p:submenu label="Membro" rendered="#{autenticacaoController.usuario.membro}">
+                            <p:menuitem value="Votar"  icon="fa fa-check-square" outcome="membro/selecaoreuniaomem.xhtml"/>
+                        </p:submenu>
+                    </p:menu>
+                </h:form>
+            </p:panel>
+            <p:separator/>
+        </p:panel>
+    </h:body>
+</html>
+
+
+

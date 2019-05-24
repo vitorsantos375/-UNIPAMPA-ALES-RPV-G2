@@ -1,0 +1,49 @@
+#logo{
+    display: block;
+    margin: auto auto;
+    align-items: center;
+}
+
+@media only screen and (max-width: 600px) {
+    #logo{
+        display:block;
+        width: 100%;
+    }
+}
+
+#header{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#logo_texto{
+    display: block;
+    font-size: 1.5em;
+    font-weight: bold;
+    argin: auto auto;
+    text-align: center;
+}
+
+.breadCrumb {
+    display: block;
+    height: 1.7em;
+}
+
+.breadCrumb ul{
+    list-style: square outside url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4gYXDSAygF1s3gAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAHklEQVQI12NgQID/MAYTAyr4z8DAwMBIjEp0hQiVAN3dBAPD0kbKAAAAAElFTkSuQmCC')
+        ;
+}
+
+.breadCrumb ul li{
+    float: left;
+    margin-left: 2em;
+}
+
+.breadCrumb ul li a:link{
+    text-decoration: none;
+}
+
+.breadCrumb ul li a:hover{
+    color: black;
+}

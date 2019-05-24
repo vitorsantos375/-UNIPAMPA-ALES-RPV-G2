@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Pautas</title> 
+        <link rel="shortcut icon" href="../img/favicon.png" type="image/x-png"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel="stylesheet" href="../css/estilo_moderador.css" />
+        <f:metadata>
+            <f:viewParam name="reuniaoDesc" value="#{itemPautaController.descReuniao}" />
+        </f:metadata>
+    </h:head> 
+    <h:body>
+        #{itemPautaController.selectBancoDeDados()}
+        #{itemPautaController.limparCampos()}
+        <p:panel>
+            <p:growl id="msg" showDetail="true" sticky="true" />
+            <h:form>
+                <p:confirmDialog id="global" global="true" showEffect="fade" hideEffect="fade" >
+                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+                <p:menubar style="float:right">
+                    <p:menuitem value="User" icon="fa fa-user" url="#"/>
+                    <p:menuitem value="Sair" icon="fa fa-sign-out" url="../"/>
+                </p:menubar>
+            </h:form>
+            <div id="header">
+                <div><img src="../img/unipampa.png" id="logo"/></div>
+                <div id="logo_texto">Sistema de Votação Online</div>
+            </div>
+            <div class="breadCrumb">
+                <ul>
+                    <li><a href="../home.xhtml">Home</a></li>
+                    <li><a href="selecaoreuniaosec.xhtml">Reuniões</a></li>
+                    <li><a href="#">Gerenciamento de Pautas</a></li>
+                </ul>
+            </div>
+            <p:separator/>
+            <p:panel header="Alerando Itens de Pauta da Reunião: #{itemPautaController.descReuniao}">
+                <p:panel header="Adicionar Novo Item de Pauta">
+                    <h:form>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="desc" value="Descrição: "/>
+                            <p:inputTextarea id="desc" rows="2" cols="45" required="True" value="#{itemPautaController.descItemPauta}" requiredMessage="A descrição não pode estar vazia!"/>
+                            <p:outputLabel for="relator" value="Relator: "/>
+                            <p:autoComplete id="relator" size="35" value="#{itemPautaController.relator}" var ="nome" itemLabel="#{nome}" itemValue="#{nome}" completeMethod="#{itemPautaController.completeText}" required="true" forceSelection="true"/>
+                        </h:panelGrid> 
+                        <p:commandButton value="Registrar Item de Pauta" icon="fa fa-plus" update="msg,listaPautas,relator,desc" actionListener="#{itemPautaController.salvarNovoItemPauta()}"/>
+                    </h:form>
+                </p:panel>
+
+                <p:separator/>
+                <p:panel id="listaPautas" header="Itens de Pauta Cadastrados">
+                    <h:form>
+                        <p:dataTable  emptyMessage="Essa reunião não possui itens pauta cadastrados" var="itemPauta" value="#{itemPautaController.listaItensPauta}" draggableRows="true" >
+                            <p:column headerText="Descrição">
+                                <h:outputText value="#{itemPauta.descricao}" />
+                            </p:column>
+
+                            <p:column headerText="Relator">
+                                <h:outputText value="#{itemPauta.relator.nome}" />
+                            </p:column>
+
+                            <p:column headerText="Editar Item de Pauta">
+                                <p:commandButton value="Excluir" icon="fa fa-trash" actionListener="#{itemPautaController.deletarItemPauta(itemPauta)}" update="msg,listaPautas">
+                                    <p:confirm header="Confirme a exclução do item de pauta" message="#{itemPauta.descricao} - #{itemPauta.relator.nome}" icon="ui-icon-alert"/>
+                                </p:commandButton>
+                                <p:commandButton value="Editar" icon="fa fa-edit" actionListener="#{itemPautaController.setItemPautaSelecionado(itemPauta)}" update="msg,listaPautas"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:panel>
+            </p:panel>
+            <p:separator/>
+        </p:panel>
+    </h:body>
+</html>
+

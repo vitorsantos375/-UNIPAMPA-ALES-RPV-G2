@@ -1,0 +1,13 @@
+1- Tela Itens Pauta:
+Melhorar a lista de pautas;
+Muito espaço em branco;
+Colocar mais informação, Unipampa e usuario;
+Ajustar logo e disposição dos menus;
+
+2- Tela de Secretario:
+Padronizar Layout;
+
+3- Tela Pós-Votação;
+Colocar mais informação da Unipampa e do usuario;
+Colocar Icones;
+Voltar direto pra tela inicial;

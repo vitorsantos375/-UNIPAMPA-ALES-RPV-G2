@@ -1,0 +1,24 @@
+1- Quais informações você quer no resultado?
+Resultado geral
+Opção de Voto de cada membro
+
+2- Como você quer essas informações?
+Primeiro o resultado geral(porcentagem de votos em cada opção), quem ganhou
+Depois o voto de cada membro, nome do membro e o voto dele
+ 
+3- Graficos?
+Por hora não
+
+4- Tela de espera?
+Mensagem de comfirmação de registro na reuniao, na tela de espera
+Tela simples, sem barra de progressão
+
+5-Validações?
+Verificar se as validações estão funcionando
+
+6-Usuabilidade?
+Fazer uma engenharia de usabilidade para definir as telas
+
+7-Tela Resultado?
+Colcar duas abas (1º e 2º Turno)
+Em cada aba apresentar o resultado total e o o voto de cada um (2 tabelas)

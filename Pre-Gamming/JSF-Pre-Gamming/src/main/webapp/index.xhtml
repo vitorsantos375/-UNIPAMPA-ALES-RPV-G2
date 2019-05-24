@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>RPV Pregame</title>
+        <style>
+            html, body{
+                font-family: Arial;
+                font-size: 1.3em;
+                line-height: 1.5em;
+                background-color: ivory;
+            }
+            input{
+                font-family: Arial;
+                font-size: 1.3em;
+                padding: 7px;
+                margin: 5px;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:inputText value="#{mensagemBean.msg.mensagem}"></h:inputText>
+            <h:commandButton value="Submit" action="#{mensagemBean.request()}"></h:commandButton>
+        </h:form>
+        <i><h:outputLabel for="msg" value="Nome"></h:outputLabel></i>
+        <b><h:outputText id="msg" value="#{mensagemBean.msg.mensagem}"></h:outputText></b>
+        <br></br>
+        <i><h:outputLabel for="res" value="Resposta"></h:outputLabel></i>
+        <b><h:outputText id="res" value="#{mensagemBean.msg.resposta}"></h:outputText></b>
+    </h:body>
+</html>
+

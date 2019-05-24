@@ -1,0 +1,26 @@
+1 - O que é o CRUD de item pauta?
+Completo.
+
+2 - Quando é possivel utilizar este CRUD?
+Dentro de uma reuniao e fora de uma.
+
+3 - Quem utiliza o CRUD?
+Secretario, prepara a reunião.
+
+5 - Combo box ou InputText?
+input text com busca, selecionar o relator que desejar.
+
+6 - Fluxo para cadastrar item de Pauta?
+Seleciona uma reunião e depois cadastra itens de pauta. Tipo o do moderador, seleciona as reunião e depois cadastra item pauta.
+
+7 - Colocar a o caminho onde voce vai estar.
+
+8 - Botão salvar geral.
+
+9 - Excluir, igual na opção de voto.
+
+10 - Quem ta logado e com qual papel em todas as telas.
+
+11- Uma pessoa pode ser moderador,relator e secretario(não é pra essa entrega)
+
+12 - 
